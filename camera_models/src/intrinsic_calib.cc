@@ -12,8 +12,7 @@
 #include "camodocal/chessboard/Chessboard.h"
 #include "camodocal/gpl/gpl.h"
 
-int
-main( int argc, char** argv )
+int main( int argc, char** argv )
 {
     cv::Size boardSize;
     float squareSize;
