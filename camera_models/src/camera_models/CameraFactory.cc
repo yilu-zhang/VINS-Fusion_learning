@@ -174,7 +174,7 @@ CameraFactory::generateCameraFromYamlFile( const std::string& filename )
             return camera;
         }
         case Camera::MEI:
-        default:
+        default://euroc
         {
             CataCameraPtr camera( new CataCamera );
 
