@@ -110,7 +110,7 @@ class Estimator
     MarginalizationFlag  marginalization_flag;
     Vector3d g;
 
-    Matrix3d ric[2];//body_R_cam0
+    Matrix3d ric[2];//body_R_cam0=bodyk_R_cam0k
     Vector3d tic[2];//body_R_cam0
 
     Vector3d        Ps[(WINDOW_SIZE + 1)];
