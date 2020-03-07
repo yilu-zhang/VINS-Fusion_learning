@@ -83,7 +83,7 @@ class Estimator
     enum SolverFlag
     {
         INITIAL,
-        NON_LINEAR
+        NON_LINEAR //finished inital
     };
 
     enum MarginalizationFlag

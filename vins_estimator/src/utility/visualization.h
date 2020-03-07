@@ -43,7 +43,7 @@ void registerPub(ros::NodeHandle &n);
 
 void pubLatestOdometry(const Eigen::Vector3d &P, const Eigen::Quaterniond &Q, const Eigen::Vector3d &V, double t);
 
-void pubTrackImage(const cv::Mat &imgTrack, const double t);
+void pubTrackImage(const cv::Mat &imgTrack, const double t);//publish "image_track"
 
 void printStatistics(const Estimator &estimator, double t);
 

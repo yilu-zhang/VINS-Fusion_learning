@@ -247,7 +247,7 @@ int main(int argc, char **argv)
 
     ROS_WARN("waiting for image and imu...");
 
-    registerPub(n);
+    registerPub(n);//register publish topic
 
     ros::Subscriber sub_imu = n.subscribe(IMU_TOPIC, 2000, imu_callback, ros::TransportHints().tcpNoDelay());
     ros::Subscriber sub_feature = n.subscribe("/feature_tracker/feature", 2000, feature_callback);
