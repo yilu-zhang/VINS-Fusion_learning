@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <chrono>
 
+//cout time,especially debug
 class TicToc
 {
   public:
