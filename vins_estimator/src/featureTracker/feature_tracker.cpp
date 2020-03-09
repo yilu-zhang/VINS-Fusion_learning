@@ -414,7 +414,7 @@ vector<cv::Point2f> FeatureTracker::ptsVelocity(vector<int> &ids, vector<cv::Poi
     // caculate points velocity
     if (!prev_id_pts.empty())
     {
-        double dt = cur_time - prev_time;
+        double dt = cur_time - prev_time;//time between two frame
         
         for (unsigned int i = 0; i < pts.size(); i++)
         {

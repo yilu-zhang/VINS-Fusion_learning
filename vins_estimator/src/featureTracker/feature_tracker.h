@@ -38,13 +38,15 @@ class FeatureTracker
 {
 public:
     FeatureTracker();
+    //return:cur_un_pts[i].x,cur_un_pts[i].y,1,cur_pts[i].x,cur_pts[i].y,pts_velocity[i].x,pts_velocity[i].y
     map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> trackImage(double _cur_time, const cv::Mat &_img, const cv::Mat &_img1 = cv::Mat());
-    void setMask();
+    void setMask();//set mask and sort points by track_cnt
     void readIntrinsicParameter(const vector<string> &calib_file);
     void showUndistortion(const string &name);
     void rejectWithF();
     void undistortedPoints();
     vector<cv::Point2f> undistortedPts(vector<cv::Point2f> &pts, camodocal::CameraPtr cam);
+    //caculate the pts_velocity in undistortedPts plane.if first adding,pts_velocity=0
     vector<cv::Point2f> ptsVelocity(vector<int> &ids, vector<cv::Point2f> &pts, 
                                     map<int, cv::Point2f> &cur_id_pts, map<int, cv::Point2f> &prev_id_pts);
     void showTwoImage(const cv::Mat &img1, const cv::Mat &img2, 
@@ -68,8 +70,11 @@ public:
     vector<cv::Point2f> n_pts;
     vector<cv::Point2f> predict_pts;
     vector<cv::Point2f> predict_pts_debug;
+    //the points in pixel frame
     vector<cv::Point2f> prev_pts, cur_pts, cur_right_pts;
+    //the pts in normalize plane of optic,already undistorted.
     vector<cv::Point2f> prev_un_pts, cur_un_pts, cur_un_right_pts;
+    //the pts_velocity in normalize plane of optic.if first adding,pts_velocity=0
     vector<cv::Point2f> pts_velocity, right_pts_velocity;
     vector<int> ids, ids_right;
     vector<int> track_cnt;
@@ -77,7 +82,7 @@ public:
     map<int, cv::Point2f> cur_un_right_pts_map, prev_un_right_pts_map;
     map<int, cv::Point2f> prevLeftPtsMap;
     vector<camodocal::CameraPtr> m_camera;
-    double cur_time;
+    double cur_time;//the timestamp of frame
     double prev_time;
     bool stereo_cam;
     int n_id;
