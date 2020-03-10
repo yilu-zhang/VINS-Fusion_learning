@@ -72,6 +72,7 @@ class Utility
         return ans;
     }
 
+    //return angle_degrees,get ypr from variable zyx axis
     static Eigen::Vector3d R2ypr(const Eigen::Matrix3d &R)
     {
         Eigen::Vector3d n = R.col(0);
@@ -116,6 +117,7 @@ class Utility
         return Rz * Ry * Rx;
     }
 
+    //return Rwi
     static Eigen::Matrix3d g2R(const Eigen::Vector3d &g);
 
     template <size_t N>

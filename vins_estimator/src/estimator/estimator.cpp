@@ -177,7 +177,7 @@ void Estimator::inputImage(double t, const cv::Mat &_img, const cv::Mat &_img1)
     
     if(MULTIPLE_THREAD)  
     {     
-        if(inputImageCnt % 2 == 0)
+        if(inputImageCnt % 2 == 0)//let processMeasurements thread have enough time process
         {
             mBuf.lock();
             featureBuf.push(make_pair(t, featureFrame));
@@ -356,7 +356,9 @@ void Estimator::initFirstIMUPose(vector<pair<double, Eigen::Vector3d>> &accVecto
     averAcc = averAcc / n;
     printf("averge acc %f %f %f\n", averAcc.x(), averAcc.y(), averAcc.z());
     Matrix3d R0 = Utility::g2R(averAcc);
+    //zhang:TODO,why repeat in g2R?
     double yaw = Utility::R2ypr(R0).x();
+    cout<< "init rpeat yaw is,expect 0:" << yaw <<endl;
     R0 = Utility::ypr2R(Eigen::Vector3d{-yaw, 0, 0}) * R0;
     Rs[0] = R0;
     cout << "init R0 " << endl << Rs[0] << endl;

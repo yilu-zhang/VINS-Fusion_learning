@@ -79,11 +79,11 @@ class Estimator
     void fastPredictIMU(double t, Eigen::Vector3d linear_acceleration, Eigen::Vector3d angular_velocity);
     bool IMUAvailable(double t);
     void initFirstIMUPose(vector<pair<double, Eigen::Vector3d>> &accVector);
-
+    
     enum SolverFlag
     {
         INITIAL,
-        NON_LINEAR //finished inital
+        NON_LINEAR 
     };
 
     enum MarginalizationFlag
@@ -106,7 +106,7 @@ class Estimator
 
     FeatureTracker featureTracker;
 
-    SolverFlag solver_flag;
+    SolverFlag solver_flag;//NON_LINEAR:finished inital
     MarginalizationFlag  marginalization_flag;
     Vector3d g;
 
