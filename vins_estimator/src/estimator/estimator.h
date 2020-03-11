@@ -66,6 +66,7 @@ class Estimator
     void vector2double();
     void double2vector();
     bool failureDetection();
+    //get imu frame t0<t<t1 and one more frame
     bool getIMUInterval(double t0, double t1, vector<pair<double, Eigen::Vector3d>> &accVector, 
                                               vector<pair<double, Eigen::Vector3d>> &gyrVector);
     void getPoseInWorldFrame(Eigen::Matrix4d &T);
@@ -78,6 +79,7 @@ class Estimator
     void updateLatestStates();
     void fastPredictIMU(double t, Eigen::Vector3d linear_acceleration, Eigen::Vector3d angular_velocity);
     bool IMUAvailable(double t);
+    //init when robot is stationary
     void initFirstIMUPose(vector<pair<double, Eigen::Vector3d>> &accVector);
     
     enum SolverFlag
@@ -97,6 +99,7 @@ class Estimator
     std::mutex mPropagate;
     queue<pair<double, Eigen::Vector3d>> accBuf;
     queue<pair<double, Eigen::Vector3d>> gyrBuf;
+    //<<image.timestamps,<pts_ids,<camera_ids,xyz_uv_velocity>>>>
     queue<pair<double, map<int, vector<pair<int, Eigen::Matrix<double, 7, 1> > > > > > featureBuf;
     double prevTime, curTime;
     bool openExEstimation;
@@ -113,9 +116,10 @@ class Estimator
     Matrix3d ric[2];//body_R_cam0=bodyk_R_cam0k
     Vector3d tic[2];//body_R_cam0
 
+    //varible x
     Vector3d        Ps[(WINDOW_SIZE + 1)];
     Vector3d        Vs[(WINDOW_SIZE + 1)];
-    Matrix3d        Rs[(WINDOW_SIZE + 1)];
+    Matrix3d        Rs[(WINDOW_SIZE + 1)];//Rwi
     Vector3d        Bas[(WINDOW_SIZE + 1)];
     Vector3d        Bgs[(WINDOW_SIZE + 1)];
     double td;
