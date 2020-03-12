@@ -111,7 +111,7 @@ class Estimator
 
     SolverFlag solver_flag;//NON_LINEAR:finished inital
     MarginalizationFlag  marginalization_flag;
-    Vector3d g;
+    Vector3d g;//in world frame
 
     Matrix3d ric[2];//body_R_cam0=bodyk_R_cam0k
     Vector3d tic[2];//body_R_cam0
