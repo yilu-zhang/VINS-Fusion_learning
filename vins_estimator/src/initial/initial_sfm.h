@@ -28,7 +28,7 @@ struct SFMFeature
 {
     bool state;
     int id;
-    vector<pair<int,Vector2d>> observation;
+    vector<pair<int,Vector2d>> observation;//normalize plane
     double position[3];
     double depth;
 };
