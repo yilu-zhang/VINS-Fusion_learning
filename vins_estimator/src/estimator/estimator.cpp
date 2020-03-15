@@ -584,7 +584,7 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 bool Estimator::initialStructure()
 {
     TicToc t_sfm;
-    //check imu observibility
+    //check imu observibility,suffcient acc variable
     {
         map<double, ImageFrame>::iterator frame_it;
         Vector3d sum_g;

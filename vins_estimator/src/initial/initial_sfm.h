@@ -28,8 +28,8 @@ struct SFMFeature
 {
     bool state;
     int id;
-    vector<pair<int,Vector2d>> observation;//normalize plane
-    double position[3];
+    vector<pair<int,Vector2d>> observation;//frame_num-point in normalize plane
+    double position[3];//3D
     double depth;
 };
 
@@ -81,5 +81,5 @@ private:
 							  int frame1, Eigen::Matrix<double, 3, 4> &Pose1,
 							  vector<SFMFeature> &sfm_f);
 
-	int feature_num;
+	int feature_num;//sfm_f.size()
 };
