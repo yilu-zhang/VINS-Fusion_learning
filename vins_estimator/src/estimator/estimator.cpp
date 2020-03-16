@@ -613,7 +613,7 @@ bool Estimator::initialStructure()
         }
     }
     // global sfm
-    Quaterniond Q[frame_count + 1];
+    Quaterniond Q[frame_count + 1];//qli
     Vector3d T[frame_count + 1];
     map<int, Vector3d> sfm_tracked_points;
     vector<SFMFeature> sfm_f;
@@ -649,7 +649,7 @@ bool Estimator::initialStructure()
         return false;
     }
 
-    //solve pnp for all frame
+    //solve pnp for all frame,including non KF
     map<double, ImageFrame>::iterator frame_it;
     map<int, Vector3d>::iterator it;
     frame_it = all_image_frame.begin( );
@@ -660,7 +660,7 @@ bool Estimator::initialStructure()
         if((frame_it->first) == Headers[i])
         {
             frame_it->second.is_key_frame = true;
-            frame_it->second.R = Q[i].toRotationMatrix() * RIC[0].transpose();
+            frame_it->second.R = Q[i].toRotationMatrix() * RIC[0].transpose();//RlI
             frame_it->second.T = T[i];
             i++;
             continue;
@@ -669,7 +669,7 @@ bool Estimator::initialStructure()
         {
             i++;
         }
-        Matrix3d R_inital = (Q[i].inverse()).toRotationMatrix();
+        Matrix3d R_inital = (Q[i].inverse()).toRotationMatrix();//qil
         Vector3d P_inital = - R_inital * T[i];
         cv::eigen2cv(R_inital, tmp_r);
         cv::Rodrigues(tmp_r, rvec);
@@ -730,7 +730,7 @@ bool Estimator::initialStructure()
 bool Estimator::visualInitialAlign()
 {
     TicToc t_g;
-    VectorXd x;
+    VectorXd x;//state,all_frame_count * 3 + 3 + 1
     //solve scale
     bool result = VisualIMUAlignment(all_image_frame, Bgs, g, x);
     if(!result)
@@ -1440,7 +1440,7 @@ void Estimator::slideWindowOld()
     {
         Matrix3d R0, R1;
         Vector3d P0, P1;
-        R0 = back_R0 * ric[0];
+        R0 = back_R0 * ric[0];//camera
         R1 = Rs[0] * ric[0];
         P0 = back_P0 + back_R0 * tic[0];
         P1 = Ps[0] + Rs[0] * tic[0];

@@ -133,7 +133,7 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	//cout << "set 0 and " << l << " as known " << endl;
 	// have relative_r relative_t
 	// intial two view
-	//qlr
+	//qli
 	q[l].w() = 1;
 	q[l].x() = 0;
 	q[l].y() = 0;
@@ -152,7 +152,7 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	double c_translation[frame_num][3];
 	Eigen::Matrix<double, 3, 4> Pose[frame_num];
 
-	//qrl,x=pose(rl)*X
+	//qil,x=pose(il)*X
 	c_Quat[l] = q[l].inverse();
 	c_Rotation[l] = c_Quat[l].toRotationMatrix();
 	c_Translation[l] = -1 * (c_Rotation[l] * T[l]);
@@ -246,6 +246,7 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	ceres::Problem problem;
 	ceres::LocalParameterization* local_parameterization = new ceres::QuaternionParameterization();
 	//cout << " begin full BA " << endl;
+	//add vertex
 	for (int i = 0; i < frame_num; i++)
 	{
 		//double array for ceres
@@ -268,22 +269,25 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 		}
 	}
 
+	//add edge
 	for (int i = 0; i < feature_num; i++)
 	{
 		if (sfm_f[i].state != true)
 			continue;
 		for (int j = 0; j < int(sfm_f[i].observation.size()); j++)
 		{
+			//zhang:XXX repeatly use one variable
 			int l = sfm_f[i].observation[j].first;
 			ceres::CostFunction* cost_function = ReprojectionError3D::Create(
 												sfm_f[i].observation[j].second.x(),
 												sfm_f[i].observation[j].second.y());
 
-    		problem.AddResidualBlock(cost_function, NULL, c_rotation[l], c_translation[l], 
+			problem.AddResidualBlock(cost_function, NULL, c_rotation[l], c_translation[l], 
     								sfm_f[i].position);	 
 		}
 
 	}
+	
 	ceres::Solver::Options options;
 	options.linear_solver_type = ceres::DENSE_SCHUR;
 	//options.minimizer_progress_to_stdout = true;
@@ -306,12 +310,12 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 		q[i].x() = c_rotation[i][1]; 
 		q[i].y() = c_rotation[i][2]; 
 		q[i].z() = c_rotation[i][3]; 
-		q[i] = q[i].inverse();//qlr
+		q[i] = q[i].inverse();//qli
 		//cout << "final  q" << " i " << i <<"  " <<q[i].w() << "  " << q[i].vec().transpose() << endl;
 	}
 	for (int i = 0; i < frame_num; i++)
 	{
-		//Tlr
+		//Tli
 		T[i] = -1 * (q[i] * Vector3d(c_translation[i][0], c_translation[i][1], c_translation[i][2]));
 		//cout << "final  t" << " i " << i <<"  " << T[i](0) <<"  "<< T[i](1) <<"  "<< T[i](2) << endl;
 	}
