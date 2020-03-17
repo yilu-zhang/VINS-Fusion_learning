@@ -351,7 +351,7 @@ void FeatureManager::triangulate(int frameCnt, Vector3d Ps[], Matrix3d Rs[], Vec
             Eigen::Matrix<double, 3, 4> leftPose;
             Eigen::Vector3d t0 = Ps[imu_i] + Rs[imu_i] * tic[0];
             Eigen::Matrix3d R0 = Rs[imu_i] * ric[0];
-            leftPose.leftCols<3>() = R0.transpose();
+            leftPose.leftCols<3>() = R0.transpose();//Rcw
             leftPose.rightCols<1>() = -R0.transpose() * t0;
 
             imu_i++;
@@ -404,9 +404,9 @@ void FeatureManager::triangulate(int frameCnt, Vector3d Ps[], Matrix3d Rs[], Vec
             Eigen::Vector3d t = R0.transpose() * (t1 - t0);
             Eigen::Matrix3d R = R0.transpose() * R1;
             Eigen::Matrix<double, 3, 4> P;
-            P.leftCols<3>() = R.transpose();
+            P.leftCols<3>() = R.transpose();//Rcjc0
             P.rightCols<1>() = -R.transpose() * t;
-            Eigen::Vector3d f = it_per_frame.point.normalized();
+            Eigen::Vector3d f = it_per_frame.point.normalized();//f(2)=1 change to f(2)!=1
             svd_A.row(svd_idx++) = f[0] * P.row(2) - f[2] * P.row(0);
             svd_A.row(svd_idx++) = f[1] * P.row(2) - f[2] * P.row(1);
 
@@ -427,7 +427,7 @@ void FeatureManager::triangulate(int frameCnt, Vector3d Ps[], Matrix3d Rs[], Vec
             it_per_id.estimated_depth = INIT_DEPTH;
         }
 
-    }
+    }//end for
 }
 
 void FeatureManager::removeOutlier(set<int> &outlierIndex)

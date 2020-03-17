@@ -718,7 +718,13 @@ bool Estimator::initialStructure()
         frame_it->second.T = T_pnp;
     }
     if (visualInitialAlign())
+    {
+	//zhang:test frame_0 whether is world frame
+	cout<<"test frame_0 whether is world frame,l:"<<l<<endl;
+	cout<<"R0:"<<Utility::R2ypr(Rs[0]).transpose()<<endl;
+	cout<<"Rl:"<<Utility::R2ypr(Rs[l]).transpose()<<endl;
         return true;
+    }
     else
     {
         ROS_INFO("misalign visual structure with IMU");
@@ -769,7 +775,7 @@ bool Estimator::visualInitialAlign()
 
     Matrix3d R0 = Utility::g2R(g);
     double yaw = Utility::R2ypr(R0 * Rs[0]).x();
-    R0 = Utility::ypr2R(Eigen::Vector3d{-yaw, 0, 0}) * R0;
+    R0 = Utility::ypr2R(Eigen::Vector3d{-yaw, 0, 0}) * R0;//make the yaw of frame_0 is 0 
     g = R0 * g;
     //Matrix3d rot_diff = R0 * Rs[0].transpose();
     Matrix3d rot_diff = R0;
@@ -781,7 +787,7 @@ bool Estimator::visualInitialAlign()
     }
     ROS_DEBUG_STREAM("g0     " << g.transpose());
     ROS_DEBUG_STREAM("my R0  " << Utility::R2ypr(Rs[0]).transpose()); 
-
+      
     f_manager.clearDepth();
     f_manager.triangulate(frame_count, Ps, Rs, tic, ric);
 

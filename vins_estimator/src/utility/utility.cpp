@@ -11,7 +11,7 @@
 
 Eigen::Matrix3d Utility::g2R(const Eigen::Vector3d &g)
 {
-    Eigen::Matrix3d R0;
+    Eigen::Matrix3d R0;//from ng1 frame to ng2 frame
     Eigen::Vector3d ng1 = g.normalized();
     Eigen::Vector3d ng2{0, 0, 1.0};
     R0 = Eigen::Quaterniond::FromTwoVectors(ng1, ng2).toRotationMatrix();

@@ -65,7 +65,7 @@ class FeaturePerId
     int start_frame;
     vector<FeaturePerFrame> feature_per_frame;
     int used_num;
-    double estimated_depth;
+    double estimated_depth;//lambda
     int solve_flag; // 0 haven't solve yet; 1 solve succ; 2 solve fail;
 
     FeaturePerId(int _feature_id, int _start_frame)
