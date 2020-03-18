@@ -418,7 +418,7 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     //if parallax is large,MARGIN_OLD;else MARGIN_SECOND_NEW
     if (f_manager.addFeatureCheckParallax(frame_count, image, td))
     {
-        marginalization_flag = MARGIN_OLD;
+        marginalization_flag = MARGIN_OLD;//add KF
         //printf("keyframe\n");
     }
     else
@@ -773,7 +773,7 @@ bool Estimator::visualInitialAlign()
         }
     }
 
-    Matrix3d R0 = Utility::g2R(g);
+    Matrix3d R0 = Utility::g2R(g);//Rwcl
     double yaw = Utility::R2ypr(R0 * Rs[0]).x();
     R0 = Utility::ypr2R(Eigen::Vector3d{-yaw, 0, 0}) * R0;//make the yaw of frame_0 is 0 
     g = R0 * g;
