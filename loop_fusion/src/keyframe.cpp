@@ -35,7 +35,7 @@ KeyFrame::KeyFrame(double _time_stamp, int _index, Vector3d &_vio_T_w_i, Matrix3
 	origin_vio_T = vio_T_w_i;		
 	origin_vio_R = vio_R_w_i;
 	image = _image.clone();
-	cv::resize(image, thumbnail, cv::Size(80, 60));
+	cv::resize(image, thumbnail, cv::Size(80, 60));//no use
 	point_3d = _point_3d;
 	point_2d_uv = _point_2d_uv;
 	point_2d_norm = _point_2d_norm;

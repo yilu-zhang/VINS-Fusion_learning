@@ -172,6 +172,7 @@ void margin_point_callback(const sensor_msgs::PointCloudConstPtr &point_msg)
     pub_margin_cloud.publish(point_cloud);
 }
 
+//9 of 11 pose
 void pose_callback(const nav_msgs::Odometry::ConstPtr &pose_msg)
 {
     //ROS_INFO("pose_callback!");
@@ -189,6 +190,7 @@ void pose_callback(const nav_msgs::Odometry::ConstPtr &pose_msg)
     */
 }
 
+//11 of 11 pose
 void vio_callback(const nav_msgs::Odometry::ConstPtr &pose_msg)
 {
     //ROS_INFO("vio_callback!");
@@ -296,6 +298,7 @@ void process()
                 continue;
             }
 
+            //SKIP_CNT=0 no use
             if (skip_cnt < SKIP_CNT)
             {
                 skip_cnt++;
