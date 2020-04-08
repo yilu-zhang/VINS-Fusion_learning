@@ -275,8 +275,9 @@ bool KeyFrame::findConnection(KeyFrame* old_kf)
 	vector<cv::Point2f> matched_2d_cur_norm, matched_2d_old_norm;
 	vector<cv::Point3f> matched_3d;
 	vector<double> matched_id;
-	vector<uchar> status;
+	vector<uchar> status; 
 
+	//all equal to the number of matched_2d_cur(harris corner)
 	matched_3d = point_3d;
 	matched_2d_cur = point_2d_uv;
 	matched_2d_cur_norm = point_2d_norm;
@@ -411,12 +412,12 @@ bool KeyFrame::findConnection(KeyFrame* old_kf)
 	#endif
 	Eigen::Vector3d PnP_T_old;
 	Eigen::Matrix3d PnP_R_old;
-	Eigen::Vector3d relative_t;
+	Eigen::Vector3d relative_t;//imu cur to old
 	Quaterniond relative_q;
 	double relative_yaw;
 	if ((int)matched_2d_cur.size() > MIN_LOOP_NUM)
 	{
-		status.clear();
+	    status.clear();
 	    PnPRANSAC(matched_2d_old_norm, matched_3d, status, PnP_T_old, PnP_R_old);
 	    reduceVector(matched_2d_cur, status);
 	    reduceVector(matched_2d_old, status);
@@ -427,8 +428,8 @@ bool KeyFrame::findConnection(KeyFrame* old_kf)
 	    #if 1
 	    	if (DEBUG_IMAGE)
 	        {
-	        	int gap = 10;
-	        	cv::Mat gap_image(ROW, gap, CV_8UC1, cv::Scalar(255, 255, 255));
+		    int gap = 10;
+		    cv::Mat gap_image(ROW, gap, CV_8UC1, cv::Scalar(255, 255, 255));
 	            cv::Mat gray_img, loop_match_img;
 	            cv::Mat old_img = old_kf->image;
 	            cv::hconcat(image, gap_image, gap_image);

@@ -23,7 +23,7 @@
 
 extern camodocal::CameraPtr m_camera;
 extern Eigen::Vector3d tic;
-extern Eigen::Matrix3d qic;
+extern Eigen::Matrix3d qic; //extrinsic parameter
 extern ros::Publisher pub_match_img;
 extern int VISUALIZATION_SHIFT_X;
 extern int VISUALIZATION_SHIFT_Y;

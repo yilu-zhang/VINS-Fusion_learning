@@ -50,8 +50,8 @@ public:
 			 cv::Mat &_image, int _loop_index, Eigen::Matrix<double, 8, 1 > &_loop_info,
 			 vector<cv::KeyPoint> &_keypoints, vector<cv::KeyPoint> &_keypoints_norm, vector<BRIEF::bitset> &_brief_descriptors);
 	bool findConnection(KeyFrame* old_kf);
-	void computeWindowBRIEFPoint();
-	void computeBRIEFPoint();
+	void computeWindowBRIEFPoint(); //harris features
+	void computeBRIEFPoint(); //fast features
 	//void extractBrief();
 	int HammingDis(const BRIEF::bitset &a, const BRIEF::bitset &b);
 	bool searchInAera(const BRIEF::bitset window_descriptor,
@@ -69,6 +69,7 @@ public:
 	void FundmantalMatrixRANSAC(const std::vector<cv::Point2f> &matched_2d_cur_norm,
                                 const std::vector<cv::Point2f> &matched_2d_old_norm,
                                 vector<uchar> &status);
+	//return imu PnP_R_old(wi)
 	void PnPRANSAC(const vector<cv::Point2f> &matched_2d_old_norm,
 	               const std::vector<cv::Point3f> &matched_3d,
 	               std::vector<uchar> &status,
@@ -110,6 +111,6 @@ public:
 
 	bool has_loop;
 	int loop_index;
-	Eigen::Matrix<double, 8, 1 > loop_info;
+	Eigen::Matrix<double, 8, 1 > loop_info; //relative_t q yaw;imu cur to old
 };
 
