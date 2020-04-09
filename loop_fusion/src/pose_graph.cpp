@@ -526,8 +526,7 @@ void PoseGraph::optimize4DoF()
                   }
                 }
 
-                //add loop edge
-                
+                //add loop edge                
                 if((*it)->has_loop)
                 {
                     assert((*it)->loop_index >= first_looped_index);

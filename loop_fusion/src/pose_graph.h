@@ -62,7 +62,7 @@ public:
 	void publish();
 	Vector3d t_drift;
 	double yaw_drift;
-	Matrix3d r_drift;
+	Matrix3d r_drift;//r_corrected_nocoreected(vio),yaw_corrected-yaw_vio
 	// world frame( base sequence or first sequence)<----> cur sequence frame  
 	Vector3d w_t_vio;
 	Matrix3d w_r_vio;
