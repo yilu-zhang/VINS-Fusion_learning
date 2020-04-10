@@ -174,7 +174,7 @@ class Estimator
 
     double latest_time;
     Eigen::Vector3d latest_P, latest_V, latest_Ba, latest_Bg, latest_acc_0, latest_gyr_0;
-    Eigen::Quaterniond latest_Q;
+    Eigen::Quaterniond latest_Q; //Qwi
 
     bool initFirstPoseFlag;
     bool initThreadFlag;

@@ -116,7 +116,7 @@ class Utility
         return Rz * Ry * Rx;
     }
 
-    //return Rwc0
+    //return Rwi0
     static Eigen::Matrix3d g2R(const Eigen::Vector3d &g);
 
     template <size_t N>

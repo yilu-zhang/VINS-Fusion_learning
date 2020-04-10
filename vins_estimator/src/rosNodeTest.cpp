@@ -34,6 +34,7 @@ void img0_callback(const sensor_msgs::ImageConstPtr &img_msg)
 {
     m_buf.lock();
     img0_buf.push(img_msg);
+    //cout << "The number of img:" << img0_buf.size() << endl;
     m_buf.unlock();
 }
 
