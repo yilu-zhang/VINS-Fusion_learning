@@ -136,7 +136,7 @@ class Estimator
     vector<Vector3d> angular_velocity_buf[(WINDOW_SIZE + 1)];
 
     int frame_count;
-    int sum_of_outlier, sum_of_back, sum_of_front, sum_of_invalid;
+    int sum_of_outlier, sum_of_back, sum_of_front, sum_of_invalid;//sum_of_back,sum_of_front:number of slide old  or new
     int inputImageCnt;
 
     FeatureManager f_manager;
