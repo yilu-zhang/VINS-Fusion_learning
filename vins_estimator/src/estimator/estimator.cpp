@@ -660,8 +660,8 @@ bool Estimator::initialStructure()
         if((frame_it->first) == Headers[i])
         {
             frame_it->second.is_key_frame = true;
-            frame_it->second.R = Q[i].toRotationMatrix() * RIC[0].transpose();//RlI
-            frame_it->second.T = T[i];
+            frame_it->second.R = Q[i].toRotationMatrix() * RIC[0].transpose();//Rcl_imui
+            frame_it->second.T = T[i];//Tcl_ci
             i++;
             continue;
         }
@@ -720,6 +720,7 @@ bool Estimator::initialStructure()
     if (visualInitialAlign())
     {
 	//zhang:test frame_0 whether is world frame
+        cout<< "g0     " << g.transpose() << endl;
 	cout<<"test frame_0 whether is world frame,l:"<<l<<endl;
 	cout<<"R0:"<<Utility::R2ypr(Rs[0]).transpose()<<endl;
 	cout<<"Rl:"<<Utility::R2ypr(Rs[l]).transpose()<<endl;
@@ -738,7 +739,11 @@ bool Estimator::visualInitialAlign()
     TicToc t_g;
     VectorXd x;//state,all_frame_count * 3 + 3 + 1
     //solve scale
+    //zhang:
     bool result = VisualIMUAlignment(all_image_frame, Bgs, g, x);
+    cout << "all_image_frame size:" << all_image_frame.size() << endl;
+    cout << "x size:" << x.size() << endl;
+    cout << "s in x:" << x(all_image_frame.size()*3+2) << endl;
     if(!result)
     {
         ROS_DEBUG("solve g failed!");
@@ -750,8 +755,8 @@ bool Estimator::visualInitialAlign()
     {
         Matrix3d Ri = all_image_frame[Headers[i]].R;
         Vector3d Pi = all_image_frame[Headers[i]].T;
-        Ps[i] = Pi;
-        Rs[i] = Ri;
+        Ps[i] = Pi;//Pcl_ci
+        Rs[i] = Ri;//Rcl_imui
         all_image_frame[Headers[i]].is_key_frame = true;
     }
 
@@ -761,17 +766,23 @@ bool Estimator::visualInitialAlign()
         pre_integrations[i]->repropagate(Vector3d::Zero(), Bgs[i]);
     }
     for (int i = frame_count; i >= 0; i--)
-        Ps[i] = s * Ps[i] - Rs[i] * TIC[0] - (s * Ps[0] - Rs[0] * TIC[0]);
-    int kv = -1;
+        Ps[i] = s * Ps[i] - Rs[i] * TIC[0] - (s * Ps[0] - Rs[0] * TIC[0]);//Ps_b0bk
+    int kv = -1,kv_i = -1;
     map<double, ImageFrame>::iterator frame_i;
     for (frame_i = all_image_frame.begin(); frame_i != all_image_frame.end(); frame_i++)
     {
+	kv_i++;
         if(frame_i->second.is_key_frame)
         {
+	    //zhang:bug-the size of x not 11,change kv to kv_i
             kv++;
-            Vs[kv] = frame_i->second.R * x.segment<3>(kv * 3);
+            //Vs[kv] = frame_i->second.R * x.segment<3>(kv * 3);
+	    Vs[kv] = frame_i->second.R * x.segment<3>(kv_i * 3);
         }
-    }
+    }   
+    //zhang:
+    cout << "kv:"<<kv<<endl;
+    cout << "kv_i:"<<kv_i<<endl;
 
     Matrix3d R0 = Utility::g2R(g);//Rwcl
     double yaw = Utility::R2ypr(R0 * Rs[0]).x();
@@ -781,6 +792,7 @@ bool Estimator::visualInitialAlign()
     Matrix3d rot_diff = R0;
     for (int i = 0; i <= frame_count; i++)
     {
+	//Rwimu
         Ps[i] = rot_diff * Ps[i];
         Rs[i] = rot_diff * Rs[i];
         Vs[i] = rot_diff * Vs[i];

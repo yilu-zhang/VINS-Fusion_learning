@@ -33,7 +33,7 @@ class ImageFrame
         double t;
         Matrix3d R;//Rwimu
         Vector3d T;
-        IntegrationBase *pre_integration;
+        IntegrationBase *pre_integration;//every camera frame
         bool is_key_frame;
 };
 void solveGyroscopeBias(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs);

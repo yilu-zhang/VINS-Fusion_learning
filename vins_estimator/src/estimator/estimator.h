@@ -167,7 +167,7 @@ class Estimator
     vector<double *> last_marginalization_parameter_blocks;
 
     map<double, ImageFrame> all_image_frame;
-    IntegrationBase *tmp_pre_integration;
+    IntegrationBase *tmp_pre_integration;//the dt is imu 1/fps
 
     Eigen::Vector3d initP;
     Eigen::Matrix3d initR;
