@@ -153,7 +153,7 @@ class IntegrationBase
                             result_linearized_ba, result_linearized_bg, 1);
 
         //checkJacobian(_dt, acc_0, gyr_0, acc_1, gyr_1, delta_p, delta_q, delta_v,
-        //                    linearized_ba, linearized_bg);
+        //              linearized_ba, linearized_bg);
         delta_p = result_delta_p;
         delta_q = result_delta_q;
         delta_v = result_delta_v;
