@@ -84,7 +84,7 @@ class FeatureManager
 
     void setRic(Matrix3d _ric[]);
     void clearState();
-    int getFeatureCount();
+    int getFeatureCount();//only count >= 4
     bool addFeatureCheckParallax(int frame_count, const map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> &image, double td);
     vector<pair<Vector3d, Vector3d>> getCorresponding(int frame_count_l, int frame_count_r);//returm normalize plane point of l and r
     //void updateDepth(const VectorXd &x);

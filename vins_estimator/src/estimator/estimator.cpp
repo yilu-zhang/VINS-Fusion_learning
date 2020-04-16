@@ -737,10 +737,10 @@ bool Estimator::initialStructure()
 bool Estimator::visualInitialAlign()
 {
     TicToc t_g;
-    VectorXd x;//state,all_frame_count * 3 + 3 + 1
+    VectorXd x;//state,all_frame_count * 3 + 2(w)+ 1
     //solve scale
     //zhang:
-    bool result = VisualIMUAlignment(all_image_frame, Bgs, g, x);
+    bool result = VisualIMUAlignment(all_image_frame, Bgs, g, x);//gcl
     cout << "all_image_frame size:" << all_image_frame.size() << endl;
     cout << "x size:" << x.size() << endl;
     cout << "s in x:" << x(all_image_frame.size()*3+2) << endl;
@@ -878,7 +878,7 @@ void Estimator::vector2double()
         para_Ex_Pose[i][6] = q.w();
     }
 
-
+    //zhang:FeatureCount should smaller than 1000
     VectorXd dep = f_manager.getDepthVector();
     for (int i = 0; i < f_manager.getFeatureCount(); i++)
         para_Feature[i][0] = dep(i);
