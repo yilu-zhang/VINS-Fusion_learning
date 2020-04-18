@@ -23,7 +23,7 @@ void ResidualBlockInfo::Evaluate()
         raw_jacobians[i] = jacobians[i].data();
         //dim += block_sizes[i] == 7 ? 6 : block_sizes[i];
     }
-    cost_function->Evaluate(parameter_blocks.data(), residuals.data(), raw_jacobians);
+    cost_function->Evaluate(parameter_blocks.data(), residuals.data(), raw_jacobians);//call imu_factor.h or v_factor.h
 
     //std::vector<int> tmp_idx(block_sizes.size());
     //Eigen::MatrixXd tmp(dim, dim);
@@ -127,7 +127,7 @@ void MarginalizationInfo::preMarginalize()
         {
             long addr = reinterpret_cast<long>(it->parameter_blocks[i]);
             int size = block_sizes[i];
-            if (parameter_block_data.find(addr) == parameter_block_data.end())
+            if (parameter_block_data.find(addr) == parameter_block_data.end())//avoid repeat
             {
                 double *data = new double[size];
                 memcpy(data, it->parameter_blocks[i], sizeof(double) * size);

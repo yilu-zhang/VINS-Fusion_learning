@@ -57,7 +57,7 @@ class MarginalizationInfo
   public:
     MarginalizationInfo(){valid = true;};
     ~MarginalizationInfo();
-    int localSize(int size) const;
+    int localSize(int size) const;//7->6
     int globalSize(int size) const;
     void addResidualBlockInfo(ResidualBlockInfo *residual_block_info);
     void preMarginalize();

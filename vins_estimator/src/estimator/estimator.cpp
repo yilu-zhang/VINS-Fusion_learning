@@ -1186,6 +1186,7 @@ void Estimator::optimization()
             if (pre_integrations[1]->sum_dt < 10.0)
             {
                 IMUFactor* imu_factor = new IMUFactor(pre_integrations[1]);
+		//4 blocks,vector<double *> the factor is ptr
                 ResidualBlockInfo *residual_block_info = new ResidualBlockInfo(imu_factor, NULL,
                                                                            vector<double *>{para_Pose[0], para_SpeedBias[0], para_Pose[1], para_SpeedBias[1]},
                                                                            vector<int>{0, 1});
