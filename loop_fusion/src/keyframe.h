@@ -79,10 +79,11 @@ public:
 	void updatePose(const Eigen::Vector3d &_T_w_i, const Eigen::Matrix3d &_R_w_i);
 	void updateVioPose(const Eigen::Vector3d &_T_w_i, const Eigen::Matrix3d &_R_w_i);
 	void updateLoop(Eigen::Matrix<double, 8, 1 > &_loop_info);
-
+	
+	//t_old_new
 	Eigen::Vector3d getLoopRelativeT();
-	double getLoopRelativeYaw();
-	Eigen::Quaterniond getLoopRelativeQ();
+	double getLoopRelativeYaw();//new-old
+	Eigen::Quaterniond getLoopRelativeQ();//R_old_new
 
 
 

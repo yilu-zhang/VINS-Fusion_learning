@@ -120,8 +120,8 @@ void PoseGraph::addKeyFrame(KeyFrame* cur_kf, bool flag_detect_loop)
 	w_P_cur = w_R_old * relative_t + w_P_old;
 	w_R_cur = w_R_old * relative_q;
 	double shift_yaw;
-	Matrix3d shift_r;
-	Vector3d shift_t; 
+	Matrix3d shift_r;//R_w-old_w-new
+	Vector3d shift_t; //twold_error-correct
 	if(use_imu)
 	{
 	    shift_yaw = Utility::R2ypr(w_R_cur).x() - Utility::R2ypr(vio_R_cur).x();

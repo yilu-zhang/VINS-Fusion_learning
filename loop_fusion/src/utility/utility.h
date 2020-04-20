@@ -90,6 +90,7 @@ class Utility
         return ypr / M_PI * 180.0;
     }
 
+    //yaw = x1 -x2,return Rx1x2
     template <typename Derived>
     static Eigen::Matrix<typename Derived::Scalar, 3, 3> ypr2R(const Eigen::MatrixBase<Derived> &ypr)
     {

@@ -74,7 +74,7 @@ private:
 	void optimize4DoF();
 	void optimize6DoF();
 	void updatePath();
-	list<KeyFrame*> keyframelist;//all KF
+	list<KeyFrame*> keyframelist;//all KF in every sequence
 	std::mutex m_keyframelist;
 	std::mutex m_optimize_buf;
 	std::mutex m_path;

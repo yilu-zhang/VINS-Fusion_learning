@@ -271,6 +271,7 @@ void process()
             {
                 pose_msg = pose_buf.front();
                 pose_buf.pop();
+		//zhang:why?
                 while (!pose_buf.empty())
                     pose_buf.pop();
                 while (image_buf.front()->header.stamp.toSec() < pose_msg->header.stamp.toSec())
@@ -334,7 +335,7 @@ void process()
                                      pose_msg->pose.pose.orientation.x,
                                      pose_msg->pose.pose.orientation.y,
                                      pose_msg->pose.pose.orientation.z).toRotationMatrix();
-            if((T - last_t).norm() > SKIP_DIS)
+            if((T - last_t).norm() > SKIP_DIS)//SKIP_DIS=0,no use
             {
                 vector<cv::Point3f> point_3d; 
                 vector<cv::Point2f> point_2d_uv; 
