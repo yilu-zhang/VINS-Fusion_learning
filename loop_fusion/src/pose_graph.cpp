@@ -68,6 +68,8 @@ void PoseGraph::loadVocabulary(std::string voc_path)
 void PoseGraph::addKeyFrame(KeyFrame* cur_kf, bool flag_detect_loop)
 {
     //shift to base frame
+    //zhang:
+    TicToc add_t;
     Vector3d vio_P_cur;
     Matrix3d vio_R_cur;
     if (sequence_cnt != cur_kf->sequence)
@@ -239,6 +241,7 @@ void PoseGraph::addKeyFrame(KeyFrame* cur_kf, bool flag_detect_loop)
     keyframelist.push_back(cur_kf);
     publish();
     m_keyframelist.unlock();
+    printf("addKF time: %f \n", add_t.toc());
 }
 
 
@@ -553,7 +556,7 @@ void PoseGraph::optimize4DoF()
             ceres::Solve(options, &problem, &summary);
             //std::cout << summary.BriefReport() << "\n";
             
-            //printf("pose optimization time: %f \n", tmp_t.toc());
+            printf("pose optimization time: %f \n", tmp_t.toc());
             /*
             for (int j = 0 ; j < i; j++)
             {

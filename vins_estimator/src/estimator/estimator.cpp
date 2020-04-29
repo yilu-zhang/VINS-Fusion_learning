@@ -270,12 +270,15 @@ bool Estimator::IMUAvailable(double t)
 void Estimator::processMeasurements()
 {
     while (1)
-    {
+    {	
         //printf("process measurments\n");
         pair<double, map<int, vector<pair<int, Eigen::Matrix<double, 7, 1> > > > > feature;
         vector<pair<double, Eigen::Vector3d>> accVector, gyrVector;
         if(!featureBuf.empty())
         {
+	    //zhang:
+	    //cout << "The size of featureBuf is:" << featureBuf.size() << endl;
+	    TicToc total_t,imu_t;
             feature = featureBuf.front();
             curTime = feature.first + td;
             while(1)
@@ -314,9 +317,13 @@ void Estimator::processMeasurements()
                     processIMU(accVector[i].first, dt, accVector[i].second, gyrVector[i].second);
                 }
             }
+            ROS_DEBUG("process imu costs: %fms", imu_t.toc());
+	    
+	    TicToc image_t;
             mProcess.lock();
             processImage(feature.second, feature.first);
             prevTime = curTime;
+	    ROS_DEBUG("process image costs: %fms", image_t.toc());
 
             printStatistics(*this, 0);
 
@@ -331,6 +338,7 @@ void Estimator::processMeasurements()
             pubKeyframe(*this);
             pubTF(*this, header);
             mProcess.unlock();
+	    ROS_DEBUG("process imu and image costs: %fms", total_t.toc());
         }
 
         if (! MULTIPLE_THREAD)
@@ -358,10 +366,10 @@ void Estimator::initFirstIMUPose(vector<pair<double, Eigen::Vector3d>> &accVecto
     Matrix3d R0 = Utility::g2R(averAcc);
     //zhang:TODO,why repeat in g2R?
     double yaw = Utility::R2ypr(R0).x();
-    cout<< "init rpeat yaw is,expect 0:" << yaw <<endl;
+    //cout<< "init rpeat yaw is,expect 0:" << yaw <<endl;
     R0 = Utility::ypr2R(Eigen::Vector3d{-yaw, 0, 0}) * R0;
     Rs[0] = R0;
-    cout << "init R0 " << endl << Rs[0] << endl;
+    //cout << "init R0 " << endl << Rs[0] << endl;
     //Vs[0] = Vector3d(5, 0, 0);
 }
 
@@ -391,7 +399,7 @@ void Estimator::processIMU(double t, double dt, const Vector3d &linear_accelerat
     {
         pre_integrations[frame_count]->push_back(dt, linear_acceleration, angular_velocity);
         //if(solver_flag != NON_LINEAR)
-	//zhang:compute repeatly
+	//zhang:compute repeatly? no!only imu hz
         tmp_pre_integration->push_back(dt, linear_acceleration, angular_velocity);
 
         dt_buf[frame_count].push_back(dt);
@@ -540,11 +548,14 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     }
     else
     {
-        TicToc t_solve;
+        TicToc t_solve,tri_t;
         if(!USE_IMU)
             f_manager.initFramePoseByPnP(frame_count, Ps, Rs, tic, ric);
         f_manager.triangulate(frame_count, Ps, Rs, tic, ric);
+	ROS_DEBUG("triangulate costs: %fms", tri_t.toc());
+	TicToc t_opt;
         optimization();
+	ROS_DEBUG("optimization costs: %fms", t_opt.toc());
         set<int> removeIndex;
         outliersRejection(removeIndex);
         f_manager.removeOutlier(removeIndex);
@@ -720,10 +731,10 @@ bool Estimator::initialStructure()
     if (visualInitialAlign())
     {
 	//zhang:test frame_0 whether is world frame
-        cout<< "g0     " << g.transpose() << endl;
-	cout<<"test frame_0 whether is world frame,l:"<<l<<endl;
-	cout<<"R0:"<<Utility::R2ypr(Rs[0]).transpose()<<endl;
-	cout<<"Rl:"<<Utility::R2ypr(Rs[l]).transpose()<<endl;
+        //cout<< "g0     " << g.transpose() << endl;
+	//cout<<"test frame_0 whether is world frame,l:"<<l<<endl;
+	//cout<<"R0:"<<Utility::R2ypr(Rs[0]).transpose()<<endl;
+	//cout<<"Rl:"<<Utility::R2ypr(Rs[l]).transpose()<<endl;
         return true;
     }
     else
@@ -741,9 +752,9 @@ bool Estimator::visualInitialAlign()
     //solve scale
     //zhang:
     bool result = VisualIMUAlignment(all_image_frame, Bgs, g, x);//gcl
-    cout << "all_image_frame size:" << all_image_frame.size() << endl;
-    cout << "x size:" << x.size() << endl;
-    cout << "s in x:" << x(all_image_frame.size()*3+2) << endl;
+    //cout << "all_image_frame size:" << all_image_frame.size() << endl;
+    //cout << "x size:" << x.size() << endl;
+    //cout << "s in x:" << x(all_image_frame.size()*3+2) << endl;
     if(!result)
     {
         ROS_DEBUG("solve g failed!");
@@ -781,8 +792,8 @@ bool Estimator::visualInitialAlign()
         }
     }   
     //zhang:
-    cout << "kv:"<<kv<<endl;
-    cout << "kv_i:"<<kv_i<<endl;
+    //cout << "kv:"<<kv<<endl;
+    //cout << "kv_i:"<<kv_i<<endl;
 
     Matrix3d R0 = Utility::g2R(g);//Rwcl
     double yaw = Utility::R2ypr(R0 * Rs[0]).x();

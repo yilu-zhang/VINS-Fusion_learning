@@ -175,6 +175,8 @@ void margin_point_callback(const sensor_msgs::PointCloudConstPtr &point_msg)
 //9 of 11 pose
 void pose_callback(const nav_msgs::Odometry::ConstPtr &pose_msg)
 {
+    //zhang:
+    //cout << "The size of pose_buf is:" << pose_buf.size() << endl;
     //ROS_INFO("pose_callback!");
     m_buf.lock();
     pose_buf.push(pose_msg);

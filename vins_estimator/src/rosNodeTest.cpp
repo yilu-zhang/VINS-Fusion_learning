@@ -32,6 +32,8 @@ std::mutex m_buf;
 
 void img0_callback(const sensor_msgs::ImageConstPtr &img_msg)
 {
+    //zhang:
+    //cout << "The size of img0_buf is:" << img0_buf.size() << endl;
     m_buf.lock();
     img0_buf.push(img_msg);
     //cout << "The number of img:" << img0_buf.size() << endl;
@@ -39,7 +41,7 @@ void img0_callback(const sensor_msgs::ImageConstPtr &img_msg)
 }
 
 void img1_callback(const sensor_msgs::ImageConstPtr &img_msg)
-{
+{   
     m_buf.lock();
     img1_buf.push(img_msg);
     m_buf.unlock();
@@ -227,6 +229,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "vins_estimator");
     ros::NodeHandle n("~");
     ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
+    ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug);
 
     if(argc != 2)
     {
