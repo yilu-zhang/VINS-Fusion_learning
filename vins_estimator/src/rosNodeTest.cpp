@@ -76,7 +76,7 @@ void sync_process()
     while(1)
     {
         if(STEREO)
-        {
+        {	    
             cv::Mat image0, image1;
             std_msgs::Header header;
             double time = 0;
@@ -113,6 +113,8 @@ void sync_process()
         }
         else
         {
+	    //zhang:
+	    TicToc input_t;
             cv::Mat image;
             std_msgs::Header header;
             double time = 0;
@@ -126,7 +128,11 @@ void sync_process()
             }
             m_buf.unlock();
             if(!image.empty())
+	    {
                 estimator.inputImage(time, image);
+		ROS_DEBUG("input image costs: %fms", input_t.toc());
+	    }
+
         }
 
         std::chrono::milliseconds dura(2);
@@ -229,7 +235,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "vins_estimator");
     ros::NodeHandle n("~");
     ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
-    ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug);
+    //ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug);
 
     if(argc != 2)
     {
