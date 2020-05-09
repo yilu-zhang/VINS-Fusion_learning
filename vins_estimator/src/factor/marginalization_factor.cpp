@@ -244,7 +244,7 @@ void MarginalizationInfo::marginalize()
 
 
     TicToc t_thread_summing;
-    pthread_t tids[NUM_THREADS];
+    pthread_t tids[NUM_THREADS];//NUM_THREADS=4
     ThreadsStruct threadsstruct[NUM_THREADS];
     int i = 0;
     for (auto it : factors)
@@ -287,7 +287,7 @@ void MarginalizationInfo::marginalize()
     //printf("error1: %f\n", (Amm * Amm_inv - Eigen::MatrixXd::Identity(m, m)).sum());
 
     Eigen::VectorXd bmm = b.segment(0, m);
-    Eigen::MatrixXd Amr = A.block(0, m, m, n);
+    Eigen::MatrixXd Amr = A.block(0, m, m, n);//right up
     Eigen::MatrixXd Arm = A.block(m, 0, n, m);
     Eigen::MatrixXd Arr = A.block(m, m, n, n);
     Eigen::VectorXd brr = b.segment(m, n);
@@ -295,7 +295,7 @@ void MarginalizationInfo::marginalize()
     b = brr - Arm * Amm_inv * bmm;
 
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> saes2(A);
-    Eigen::VectorXd S = Eigen::VectorXd((saes2.eigenvalues().array() > eps).select(saes2.eigenvalues().array(), 0));
+    Eigen::VectorXd S = Eigen::VectorXd((saes2.eigenvalues().array() > eps).select(saes2.eigenvalues().array(), 0));//eigenvalues Diagonal
     Eigen::VectorXd S_inv = Eigen::VectorXd((saes2.eigenvalues().array() > eps).select(saes2.eigenvalues().array().inverse(), 0));
 
     Eigen::VectorXd S_sqrt = S.cwiseSqrt();
