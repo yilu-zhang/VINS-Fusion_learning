@@ -81,7 +81,7 @@ bool ProjectionTwoFrameOneCamFactor::Evaluate(double const *const *parameters, d
         Eigen::Matrix3d Rj = Qj.toRotationMatrix();
         Eigen::Matrix3d ric = qic.toRotationMatrix();
         Eigen::Matrix<double, 2, 3> reduce(2, 3);
-#ifdef UNIT_SPHERE_ERROR
+#ifdef UNIT_SPHERE_ERROR  //null
         double norm = pts_camera_j.norm();
         Eigen::Matrix3d norm_jaco;
         double x1, x2, x3;
