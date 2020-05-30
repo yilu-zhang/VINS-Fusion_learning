@@ -123,6 +123,7 @@ CameraFactory::generateCameraFromYamlFile( const std::string& filename )
         else if ( boost::iequals( sModelType, "pinhole" ) )
         {
             modelType = Camera::PINHOLE;
+	    printf("The camera type is PINHOLE\n");
         }
         else if ( boost::iequals( sModelType, "PINHOLE_FULL" ) )
         {
